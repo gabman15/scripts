@@ -1,4 +1,18 @@
 #!/bin/bash
+
+###
+# ./process-tlmc <artist_folder> <output_folder>
+#
+# Ex. ./process-tlmc "[Frozen Starfall]" /store/music/Touhou
+#
+# Given an artist folder from the Touhou lossless music collection
+# and an output directory, will automatically extract all the rars
+# and place each album in a folder named the album name grabbed from
+# song metadata
+#
+# Requirements: bsdtar from libarchive-tools and exiftool
+###
+
 folder=$1
 basefolder=$(basename $folder)
 chars="[]"
