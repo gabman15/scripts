@@ -1,0 +1,29 @@
+#!/bin/bash
+folder=$1
+basefolder=$(basename $folder)
+chars="[]"
+rename_folder=$(echo "$basefolder" | sed "s/[$chars]//g")
+output_dir=$2/$rename_folder
+echo "Checking if $output_dir exists"
+if [ ! -d $output_dir ]; then
+    mkdir $output_dir
+    for f in $folder/*; do
+        basefile=$(basename $f)
+        album_dir=$(echo "$basefile" | sed "s/\..*$//g")
+        mkdir $output_dir/$album_dir
+        bsdtar xf $f -C $output_dir/$album_dir
+        for flac in "$output_dir/$album_dir/"*.flac; do
+            if [ -f $flac ]; then
+                album=$(exiftool -s3 -Album $flac)
+                if [ -n "$album" ]; then
+                    echo "Created album $album"
+                    mv $output_dir/$album_dir $output_dir/$album
+                fi
+                break 1
+            fi
+        done
+    done
+else
+    echo "Directory Exists!"
+fi
+
