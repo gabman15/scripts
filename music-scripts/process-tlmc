@@ -22,7 +22,7 @@ echo "Checking if $output_dir exists"
 if [ ! -d $output_dir ]; then
     mkdir $output_dir
     for f in "$folder"/*; do
-        basefile=$(basename $f)
+        basefile="$(basename $f .rar)"
         album_dir=$(echo "$basefile" | sed "s/\..*$//g")
         mkdir $output_dir/$album_dir
         bsdtar xf $f -C $output_dir/$album_dir
